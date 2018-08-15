@@ -8,17 +8,19 @@ use App\Repositories\EthereumRepository as Ethereum;
  * 樂透遊戲範例
  */
 
-class LotteryController extends Controller
+class LotteryController extends ContractsController
 {
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('auth');
 
         // 莊家錢包位址
-        $this->owner_address = '0x66af7003B2265Da21515BC85336751eaf43c2948';
+        // $this->owner_address = '0x9EeaC2533E48d68725974beC1f8A79cd03A87dAD';
 
         // 被呼叫的合約或錢包位址
-        $this->contract_address = '0x52084e373189586bc7b3e21a552deffd8a1d9b66';
+        // $this->contract_address = '0x0a977fa934740179ffdec52ff4ae9cf999c1c29e';
     }
 
     // 開獎
@@ -26,7 +28,7 @@ class LotteryController extends Controller
     {
         $result = [
             'status' => false,
-            'msg'    => '',
+            'msg' => '',
         ];
 
         $result['msg'] = Ethereum::transaction(

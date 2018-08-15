@@ -10,14 +10,16 @@ use Illuminate\Http\Request;
  * 樂透遊戲範例
  */
 
-class HomeController extends Controller
+class HomeController extends ContractsController
 {
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('auth');
 
         // 被呼叫的合約或錢包位址
-        $this->contract_address = '0x52084e373189586bc7b3e21a552deffd8a1d9b66';
+        // $this->contract_address = '0x0a977fa934740179ffdec52ff4ae9cf999c1c29e';
     }
 
     /**
@@ -29,8 +31,8 @@ class HomeController extends Controller
     {
         try {
             $total_balance = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance($this->contract_address), 16, 10));
-            $balance       = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance(Auth::user()->address), 16, 10));
-            $people        = $this->count_players();
+            $balance = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance(Auth::user()->address), 16, 10));
+            $people = $this->count_players();
             return view('home', compact('balance', 'people', 'total_balance'));
 
         } catch (ErrorException $e) {
@@ -42,10 +44,10 @@ class HomeController extends Controller
     public function enter(Request $request)
     {
         $result = [
-            'status'        => false,
-            'msg'           => '',
-            'balance'       => 0,
-            'people'        => 0,
+            'status' => false,
+            'msg' => '',
+            'balance' => 0,
+            'people' => 0,
             'total_balance' => 0,
         ];
 
@@ -54,9 +56,9 @@ class HomeController extends Controller
             Ethereum::personal_unlockAccount(Auth::user()->address, Auth::user()->phrase);
 
         } catch (ErrorException $e) {
-            $result['msg']           = $e->getMessage();
-            $result['balance']       = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance(Auth::user()->address), 16, 10));
-            $result['people']        = $this->count_players();
+            $result['msg'] = $e->getMessage();
+            $result['balance'] = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance(Auth::user()->address), 16, 10));
+            $result['people'] = $this->count_players();
             $result['total_balance'] = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance($this->contract_address), 16, 10));
             return response()->json($result);
         }
@@ -80,10 +82,10 @@ class HomeController extends Controller
             []
         );
 
-        $result['status']        = true;
-        $result['balance']       = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance(Auth::user()->address), 16, 10));
+        $result['status'] = true;
+        $result['balance'] = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance(Auth::user()->address), 16, 10));
         $result['total_balance'] = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance($this->contract_address), 16, 10));
-        $result['people']        = $this->count_players();
+        $result['people'] = $this->count_players();
 
         return response()->json($result);
     }

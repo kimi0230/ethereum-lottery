@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ContractsController;
 use App\Repositories\EthereumRepository as Ethereum;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterController extends Controller
+class RegisterController extends ContractsController
 {
     /*
     |--------------------------------------------------------------------------
@@ -38,10 +38,12 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->middleware('guest');
 
         // 莊家錢包位址
-        $this->owner_address = '0x66af7003B2265Da21515BC85336751eaf43c2948';
+        // $this->owner_address = '0x9EeaC2533E48d68725974beC1f8A79cd03A87dAD';
     }
 
     /**
@@ -53,10 +55,10 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'phrase'   => 'required|string|max:255',
+            'phrase' => 'required|string|max:255',
         ]);
     }
 
@@ -86,11 +88,11 @@ class RegisterController extends Controller
             );
 
             return User::create([
-                'name'     => $data['name'],
-                'email'    => $data['email'],
+                'name' => $data['name'],
+                'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-                'phrase'   => $data['phrase'],
-                'address'  => $address,
+                'phrase' => $data['phrase'],
+                'address' => $address,
             ]);
 
         } catch (ErrorException $e) {
