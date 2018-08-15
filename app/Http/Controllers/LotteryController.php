@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\EthereumRepository as Ethereum;
+use Auth;
 
 /**
  * 樂透遊戲範例
@@ -28,28 +29,36 @@ class LotteryController extends ContractsController
     {
         $result = [
             'status' => false,
-            'msg' => '',
+            'msg' => 'no authority or no bonus',
         ];
+        $total_balance = Ethereum::from_wei(base_convert(Ethereum::eth_getBalance($this->contract_address), 16, 10));
 
-        $result['msg'] = Ethereum::transaction(
+        if (Auth::user()->address == $this->owner_address && $total_balance > 0) {
 
-            // 莊家錢包位址
-            $this->owner_address,
+            try {
+                $result['msg'] = Ethereum::transaction(
 
-            // 被呼叫的合約或錢包位址
-            $this->contract_address,
+                    // 莊家錢包位址
+                    Auth::user()->address,
 
-            // 下注金額 (單位:Wei)
-            0,
+                    // 被呼叫的合約或錢包位址
+                    $this->contract_address,
 
-            // 呼叫合約方法名稱
-            'pickWinner',
+                    // 下注金額 (單位:Wei)
+                    0,
 
-            // 呼叫合約方法參數 [型態 => 值, 型態 => 值]
-            []
-        );
+                    // 呼叫合約方法名稱
+                    'pickWinner',
 
-        $result['status'] = true;
+                    // 呼叫合約方法參數 [型態 => 值, 型態 => 值]
+                    []
+                );
+            } catch (Exception $e) {
+                $result['status'] = false;
+            }
+
+            $result['status'] = true;
+        }
 
         return response()->json($result);
     }

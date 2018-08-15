@@ -5,8 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card text-white bg-secondary">
-                <div class="card-header">樂透遊戲</div>
-
+                <div class="card-header">樂透遊戲
+                    <a class="btn btn-light float-right" href="/pick_winner">開獎</a>
+                </div>
+  
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
