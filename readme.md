@@ -19,8 +19,9 @@ vi .env
 
 - 加入以下內容:<br />
 ETH_HOST='http://localhost'<br />
-ETH_PORT=8545<br /><br />
-
+ETH_PORT=7545<br /><br />
+LOTTERY_CONTRACT_ADDR = 合約地址<br />
+LOTTERY_OWNER_ADDR = 合約擁有者帳號地址<br />
 
 ## 4. 測試環境 MySQL 設定/匯入
 
@@ -36,7 +37,7 @@ php artisan migrate<br /><br />
 https://truffleframework.com/ganache
 
 - 安裝完啟動後本機就會預設有一條私鏈:<br />
-http://127.0.0.1:8545<br /><br />
+http://127.0.0.1:7545<br /><br />
 
 
 ## 6. 安裝 Truffle 環境
@@ -52,23 +53,7 @@ cd truffle<br />
 truffle compile<br />
 truffle migrate --reset<br /><br />
 
-
-## 8. 修改 LotteryController.php
-
-- 修改 app/Http/Controllers/LotteryController.php 建構式中的「莊家錢包位址」與「被呼叫的合約或錢包位址」<br /><br />
-
-
-## 9. 修改 HomeController.php
-
-- 修改 app/Http/Controllers/HomeController.php 建構式中的「被呼叫的合約或錢包位址」<br /><br />
-
-
-## 10. 修改 RegisterController.php
-
-- 修改 app/Http/Controllers/Auth/RegisterController.php 建構式中的「莊家錢包位址」<br /><br />
-
-
-## 11. 測試看看
+## 8. 測試看看
 
 - 在 Laravel 專案根目錄下執行:<br />
 php artisan serve<br />
